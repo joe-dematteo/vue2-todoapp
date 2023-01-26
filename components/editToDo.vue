@@ -1,26 +1,24 @@
 <template>
     <div class="panel">
         <hr />
-        <div class="panelHeading">
-            <div class="backArrow"><img src="arrow back.svg" /></div>
+        <div class="panelHeadingContainer">
+            <div class="backArrow" @click="handleEditToDoForm"><img src="arrow back.svg" /></div>
             <div class="heading">Edit ToDo</div>
         </div>
-        <div class="taskCard">
+        <div class="titleCard">
             <div class="column">
-                <div class="title">Title</div>
+                <input class="title" placeholder="Edit ToDo"/>
             </div>
         </div>
         <div class="userCard">
             <div class="column">
-                <div class="title">Title</div>
+                <select class="title" />
             </div>
-            <div class="fab"><img src="Vector.svg" /></div>
         </div>
         <div class="statusCard">
             <div class="column">
-                <div class="title">Title</div>
+                <select class="title" />
             </div>
-            <div class="fab"><img src="Vector.svg" /></div>
         </div>
         <div class="buttons">
             <button class="finishBtn">Finish</button>
@@ -30,9 +28,17 @@
 </template>
 
 <script>
-    export default {
-        
+import { mapMutations } from 'vuex';
+
+export default {
+  methods: {
+    ...mapMutations(['TOGGLE_EDITTODO_FORM']),
+    // when the user clicks the edit todo button, the form will toggle on/off
+    handleEditToDoForm() {
+        this.$store.commit('TOGGLE_EDITTODO_FORM')
     }
+  }
+}
 </script>
 
 <style scoped>
@@ -45,13 +51,14 @@
     position: absolute;
     top: 0;
     width: 100%;
+    height: 100%;
     margin-top: 20px;
     border-radius: 24px 24px 0px 0px;
     height: 100%;
     padding-top: 10px;
 }
 
-.panelHeading {
+.panelHeadingContainer {
     padding: 10px;
     color: white;
     font-size: 20px;
@@ -75,9 +82,10 @@ hr {
     display: flex;
     float: left;
     padding-left: 15px;
+    cursor: pointer;
 }
 
-.taskCard {
+.titleCard {
     background: #292639;
     padding: 5px;
     border-radius: 10px;
@@ -112,37 +120,34 @@ hr {
     align-items: center;
     height: auto;
 }
-.taskCard:hover {
+.titleCard:hover {
     cursor: pointer;
     background: #3C3850;
-}
-
-.taskCard div {
-    float: left;
-}
-
-statusContainer {
-    width: 20%;
-}
-.status {
-    background: #3B3753;
-    border-radius: 50px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
 }
 
 .column {
     height: auto;
     width: 100%;
 }
-.title {
+.column input {
+    height: 100%;
+    width: 98%;
+    border: none;
+    background: transparent;
+    color: white;
     font-size: 16px;
-    color: #fff;
-    height: 20px;
-    width: 100%;
-    line-height: 20px;
     padding: 10px;
+}
+
+.column select {
+    height: 100%;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
 }
 
 .description {

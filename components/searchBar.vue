@@ -1,31 +1,17 @@
 <template>
-    <div class="bar">
-        <input placeholder="Search Todo's"/>
-        <img src="/search.svg" alt="Search"/>
+    <div>
+        <div class="bar">
+            <input placeholder="Search Todo's"/>
+            <img src="/search.svg" alt="Search"/>
+        </div>
+        <hr />
     </div>
-        
-
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 
 export default {
-    data() {
-        return {
-            activeSearch: ""
-        }
-    },
-    computed: {
-      ...mapMutations("todos", [
-            "search"
-        ])
-    },
-    methods: {
-        searchTodos() {
-            this.search(this.activeSearch)
-        }
-    }    
+
 }
 </script>
 
@@ -51,4 +37,8 @@ input::placeholder {
     size: 14px;
 }
 
+hr {
+    width: 20%;
+    border: 2px solid #292639;
+}
 </style>

@@ -2,20 +2,31 @@
   <header>
     <h1>ToDo's</h1>
       <div class="tabs">
-        <button class="item1">
-          Open
-        </button>
-        <button class="item2">
-          Closed
+        <button v-for="tab in tabs" :key="tab" 
+        :class="['tabsBtn', { active: currentTab === tab }]"
+        @click="$store.commit('updateActiveTab', currentTab = tab)">
+          {{ tab }}
         </button>
       </div>
   </header>
 </template>
 
 <script>
-    export default {
-        
+import { mapMutations, mapState } from 'vuex';
+
+
+  export default {
+    data() {
+      return {
+        currentTab: 'Open',
+        tabs: ['Open', 'Closed'],
       }
+    },
+    computed: {
+      ...mapMutations(['updateActiveTab']),
+      ...mapState(['activeTab'])
+    }
+  }
 </script>
 
 <style scoped>
@@ -53,7 +64,7 @@ h1 {
   background: #292639;
 }
 
-.item1 {
+.tabsBtn {
   font-size: 18px;
   color: white;
   background: #292639;
@@ -64,19 +75,19 @@ h1 {
   padding: .5em;
 }
 
-.item1:hover {
+.tabsBtn:hover {
   border-bottom: 1;
   border-color: rgb(255, 255, 255);
   cursor: pointer;
 }
 
-.item1:active {
+.tabsBtn.active {
   border-bottom: 1;
   border-color: rgb(255, 255, 255);
   cursor: pointer;
 }
 
-.item2 {
+.closedTabBtn {
   font-size: 18px;
   color: white;
   background: #292639;
@@ -88,13 +99,13 @@ h1 {
 
 }
 
-.item2:hover {
+.closedTabBtn:hover {
   border-bottom: 1;
   border-color: rgb(255, 255, 255);
   cursor: pointer;
 }
 
-.item2:active {
+.closedTabBtn:active {
   border-bottom: 1;
   border-color: rgb(255, 255, 255);
   cursor: pointer;

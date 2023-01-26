@@ -2,36 +2,37 @@
   <div>
     <mainHeader />
     <searchBar />
-    <task v-for="todo in todos" :key="todo.text"/>
-    <addToDo v-if="handleAddToDoBtn"/>
-    <!-- <editToDo /> -->
-    <button class="addTodoBtn" @click="handleAddToDoBtn = true">+</button>
+
+    <todoCard />
+    <addToDo v-if="toggleAddToDoForm"/>
+    <editToDo v-if="toggleEditToDoForm"/>
+    <button class="addTodoBtn" @click="handleAddToDoForm">+</button>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   computed: {
-    todos () {
-      return this.$store.state.todos.list
-    }
+    ...mapState(['todos', 'toggleAddToDoForm', 'toggleEditToDoForm', 'activeTab']),
+    // ...mapState(['toggleAddToDoForm']),
+    ...mapActions(['getToDos']),
   },
   methods: {
-    ...mapMutations({
-    }),
-    handleAddToDoBtn () {
-      this.handleAddToDoBtn = true
-        this.$store.commit('forms/toggleAddToDoForm', true)
-      
+    ...mapMutations(['TOGGLE_ADDTODO_FORM']),
+    // when the user clicks the add todo button, the form will toggle on/off
+    handleAddToDoForm() {
+        this.$store.commit('TOGGLE_ADDTODO_FORM')
+    },
+    handleEditToDoForm() {
+        this.$store.commit('TOGGLE_EDITTODO_FORM')
     }
   }
 }
 </script>
 
 <style>
-
 html, body {
   margin: 0;
   padding: 0;
@@ -54,19 +55,6 @@ html, body {
   }
 }
 
-/* .addTodoBtnDiv {
-  background-color: #b5b5b565;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  height: auto;
-  width: auto;
-  z-index: 1;
-} */
-
 .addTodoBtn {
   display: flex;
   align-items: center;
@@ -78,10 +66,14 @@ html, body {
   height: 50px;
   padding: 20px;
   margin-bottom: 20px;
-  margin-right: 15px;
+  margin-right: 20px;
   border-radius: 50%;
   border: none;
   font-size: 30px;
   cursor: pointer;
+}
+
+.addToDoForm {
+  display: none;
 }
 </style>

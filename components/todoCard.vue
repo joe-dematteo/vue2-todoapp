@@ -1,47 +1,45 @@
 <template>
     <div>
-        <hr />
-        <div class="taskCard">
+        <div class="todoCard" 
+        v-for="todo in todos" :key="todo.id">
             <div class="statusContainer">
-                <div class="status"></div>
+                <div class="status" @click="$store.commit('completeToDoItem', todo)"></div>
             </div>
             <div class="column">
-                <div class="title">{{ toDoTitle }}</div>
-                <div class="description"> User: 1</div>
+                <div class="title">{{ todo.title }}</div>
+                <div class="userId">User: {{ todo.userId }}</div>
             </div>
-            <img src="fab.svg" />
+            <img src="fab.svg" @click="handleEditToDoForm"/>
         </div>
     </div>
-        
-
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields';
+import { mapState, mapActions } from 'vuex';
 
 export default {
-  computed: {
-    ...mapFields([
-        'toDoTitle',
-        'toDoUser',
-        'toDoStatus'
-    ]),
-    toDoStatusClass() {
-        if (this.toDoStatus === 'TODO') {
-            return 'todo';
-        } else (this.toDoStatus === 'DONE') 
-            {
-            return 'done';
-            }
+    computed: {
+        ...mapState(['todos'], ['activeTab'])
+    },
+    methods: {
+        ...mapActions(['getToDos']),
+        // when the user clicks the edit todo button, the form will toggle on/off
+        handleEditToDoForm() {
+            this.$store.commit('TOGGLE_EDITTODO_FORM')
+        },
+    },
+    mounted() {
+        this.getToDos();
+    }, 
+    data() {
+        return {
+        }
     }
-  },
-  methods: {
-  }
-};
+}
 </script>
 
 <style scoped>
-.taskCard {
+.todoCard {
     background: #292639;
     padding: 15px;
     border-radius: 10px;
@@ -52,17 +50,16 @@ export default {
     align-items: center;
 }
 
-.taskCard:hover {
-    cursor: pointer;
+.todoCard:hover {
     background: #3C3850;
 }
 
-.taskCard:hover .status {
+.todoCard:hover .status {
     cursor: pointer;
     background: #292639;
 }
 
-.taskCard div {
+.todoCard div {
     float: left;
 }
 
@@ -75,6 +72,7 @@ statusContainer {
     margin-right: 10px;
     height: 50px;
     width: 50px;
+    cursor: pointer;
 }
 
 .column {
@@ -85,13 +83,14 @@ statusContainer {
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    height: 20px;
+    height: auto;
     width: 100%;
     line-height: 20px;
     padding: 10px;
+    overflow: visible;
 }
 
-.description {
+.userId {
     font-size: 14px;
     color: #fff;
     background: #3F3C4E;
@@ -106,10 +105,6 @@ img {
     float: right !important;
     height: 100%;
     width: 20.5px;
-}
-
-hr {
-    width: 20%;
-    border: 2px solid #292639;
+    cursor: pointer;
 }
 </style>
