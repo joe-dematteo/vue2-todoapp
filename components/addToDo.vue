@@ -2,7 +2,7 @@
     <div class="panel">
         <hr />
         <div class="panelHeadingContainer">
-            <div class="backArrow" @click="handleAddToDoForm"><img src="arrow back.svg" /></div>
+            <div class="backArrow" @click="handleAddToDoFormClose"><img src="arrow back.svg" /></div>
             <div class="heading">Add ToDo</div>
         </div>
         <div class="titleCard">
@@ -22,7 +22,8 @@
         </div>
         <div class="buttons">
             <button class="finishBtn">Finish</button>
-            <button class="quitBtn">Quit</button>
+            <button class="quitBtn"
+            @click="handleAddToDoFormClose">Quit</button>
         </div>
     </div>
 </template>
@@ -31,14 +32,25 @@
 import { mapMutations, mapState } from 'vuex';
 
 export default {
-  methods: {
-    ...mapMutations(['TOGGLE_ADDTODO_FORM']),
-    ...mapState(['todos']),
-    // when the user clicks the add todo button, the form will toggle on/off
-    handleAddToDoForm() {
-        this.$store.commit('TOGGLE_ADDTODO_FORM')
+    computed: {
+        ...mapState(['newTodo']),
+        // addToDoTitle: {
+        //     get () {
+        //         console.log(this.$store.state.selectedTodo.title)
+        //         return this.$store.state.selectedTodo.title
+        //     }, 
+        //     set (value) {
+        //         this.$store.commit('addNewToDoItem', value)
+        //     }
+        // },
+    },
+    methods: {
+        ...mapMutations(['TOGGLE_ADDTODO_FORM']),
+        // when the user clicks the add todo button, the form will toggle on/off
+        handleAddToDoFormClose() {
+            this.$store.commit('TOGGLE_ADDTODO_FORM')
+        }
     }
-  }
 }
 </script>
 
@@ -183,6 +195,7 @@ hr {
     border: none;
     padding-top: 15px;
     padding-bottom: 15px;
+    cursor: pointer;
 }
 
 .quitBtn {
@@ -195,5 +208,6 @@ hr {
     padding-top: 15px;
     padding-bottom: 15px;
     margin-top: 10px;
+    cursor: pointer;
 }
 </style>

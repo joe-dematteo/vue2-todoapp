@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="bar">
-            <input placeholder="Search Todo's"/>
+            <input placeholder="Search Todo's" 
+            v-model="searchWord"
+            @changed="searchWord"/>
             <img src="/search.svg" alt="Search"/>
         </div>
         <hr />
@@ -11,6 +13,16 @@
 <script>
 
 export default {
+    computed: {
+        searchWord: {
+            get () {
+                return this.$store.state.activeSearch
+            }, 
+            set (value) {
+                this.$store.commit('updateActiveSearch', value)
+            }
+        },
+    },
 
 }
 </script>
@@ -30,10 +42,11 @@ input {
     background: #292639;
     border: 0;
     width: 100%;
+    color: white;
 }
 
 input::placeholder {
-    color: white;
+    color: rgba(255, 255, 255, 0.798);
     size: 14px;
 }
 

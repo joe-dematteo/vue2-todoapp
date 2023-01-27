@@ -2,7 +2,7 @@
     <div class="panel">
         <hr />
         <div class="panelHeadingContainer">
-            <div class="backArrow" @click="handleEditToDoForm"><img src="arrow back.svg" /></div>
+            <div class="backArrow" @click="handleEditToDoFormClose"><img src="arrow back.svg" /></div>
             <div class="heading">Edit ToDo</div>
         </div>
         <div class="titleCard">
@@ -12,32 +12,47 @@
         </div>
         <div class="userCard">
             <div class="column">
-                <select class="title" />
+                <select class="title" placeholder="Test"/>
+                    <option value="1"></option>
             </div>
         </div>
         <div class="statusCard">
             <div class="column">
-                <select class="title" />
+                <select class="title" placeholder="Status"/>
+                    <option value="1"></option>
             </div>
         </div>
         <div class="buttons">
-            <button class="finishBtn">Finish</button>
-            <button class="quitBtn">Quit</button>
+            <button class="finishBtn"
+            @click="$store.commit('updateToDoItem', todo)">Finish</button>
+            <button class="quitBtn"
+            @click="handleEditToDoFormClose">Quit</button>
         </div>
     </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapActions, mapState } from 'vuex';
 
 export default {
-  methods: {
-    ...mapMutations(['TOGGLE_EDITTODO_FORM']),
-    // when the user clicks the edit todo button, the form will toggle on/off
-    handleEditToDoForm() {
-        this.$store.commit('TOGGLE_EDITTODO_FORM')
+    computed: {
+        ...mapState(['todos']),
+        ...mapActions(['updateToDoItem'])
+    },
+    methods: {
+        ...mapMutations(['TOGGLE_EDITTODO_FORM']),
+        // when the user clicks the edit todo button, the form will toggle on/off
+        handleEditToDoFormClose() {
+            this.$store.commit('TOGGLE_EDITTODO_FORM')
+        },
+        handleUpdateToDoItem() {
+            this.updateToDoItem()
+        }
+    },
+    data() {
+        return {
+        }
     }
-  }
 }
 </script>
 
@@ -128,6 +143,7 @@ hr {
 .column {
     height: auto;
     width: 100%;
+    color: white;
 }
 .column input {
     height: 100%;
@@ -148,6 +164,16 @@ hr {
     font-size: 16px;
     padding: 10px;
     cursor: pointer;
+    overflow: hidden;
+}
+
+.column select option {
+    background: #292639;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .description {
@@ -182,6 +208,7 @@ hr {
     border: none;
     padding-top: 15px;
     padding-bottom: 15px;
+    cursor: pointer;
 }
 
 .quitBtn {
@@ -194,5 +221,6 @@ hr {
     padding-top: 15px;
     padding-bottom: 15px;
     margin-top: 10px;
+    cursor: pointer;
 }
 </style>

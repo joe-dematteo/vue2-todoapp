@@ -16,7 +16,6 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapState(['todos', 'toggleAddToDoForm', 'toggleEditToDoForm', 'activeTab']),
-    // ...mapState(['toggleAddToDoForm']),
     ...mapActions(['getToDos']),
   },
   methods: {
@@ -25,10 +24,11 @@ export default {
     handleAddToDoForm() {
         this.$store.commit('TOGGLE_ADDTODO_FORM')
     },
+    // when the user clicks the edit todo button, the form will toggle on/off
     handleEditToDoForm() {
-        this.$store.commit('TOGGLE_EDITTODO_FORM')
+        this.$store.commit('toggleEditToDoForm')
     }
-  }
+  },
 }
 </script>
 
