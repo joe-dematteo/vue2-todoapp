@@ -1,19 +1,20 @@
-// import { getField, updateField } from 'vuex-map-fields'
+import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
     todos: [],
-    // selectedTodo: {
-    //     userId: Number,
-    //     id: Number,
-    //     title: String,
-    //     completed: Boolean
-    // },
-    // newTodo: {
-    //     userId: Number,
-    //     id: Number,
-    //     title: String,
-    //     completed: Boolean
-    // },
+    // TODO: STILL WORKING ON THIS
+    selectedTodo: {
+        completed: '',
+        id: '',
+        title: '',
+        userId: '',
+    },
+    newTodo: {
+        completed: '',
+        id: '',
+        title: '',
+        userId: '',
+    },
     activeTab: 'Open',
     activeSearch: '',
     toggleAddToDoForm: false,
@@ -21,7 +22,7 @@ export const state = () => ({
 })
 
 export const getters = {
-    // getField,
+    getField,
     getFilteredTodos: state => {
         console.log('getFilteredTodos getter')
         // if the search is empty and the activeTab is Open then filter the todos by the search and completed = false
@@ -51,24 +52,10 @@ export const actions = {
         context.commit('addToDos', todos)
         return todos
     },
-    // TODO - INCORPORATE THIS INTO THE APP
-    async addNewTodo(context, todo) {
-        console.log('createTodo action')
-        const newTodo = await this.$axios.$post('https://jsonplaceholder.typicode.com/users/1/todos', todo)
-        context.commit('addToDos', newTodo)
-        return newTodo
-    },
-    // TODO - INCORPORATE THIS INTO THE APP
-    async updateTodoItem(context, todo) {
-        console.log('updateTodoItem action')
-        const updatedTodo = await this.$axios.$put(`https://jsonplaceholder.typicode.com/users/1/todos/${todo.id}`, todo)
-        context.commit('completeToDoItem', updatedTodo)
-        return updatedTodo
-    },
 }
 
 export const mutations = {
-    // updateField,
+    updateField,
     addToDos(state, todos) {
         console.log('addToDos mutation started')
         state.todos.push(...todos)
@@ -79,17 +66,31 @@ export const mutations = {
         state.selectedTodo = todo
         console.log('selectToDoItem mutation finished', state.selectedTodo)
     },
-    addNewToDoItem(state, todo) {
+    addNewToDo(state, todo) {
         console.log('addNewToDoItem mutation started')
         state.newTodo = todo
-        // state.todos.push(state.newTodo)
+        state.todos.unshift(state.newTodo)
+        // reset the newTodo object state
+        state.newTodo = {
+            completed: '',
+            id: '',
+            title: '',
+            userId: '',
+        }
         console.log('addNewToDoItem mutation finished', state.newTodo)
     },
-    completeToDoItem(state, todo) {
-        console.log('completeToDoItem mutation started')
-        const index = state.todos.findIndex((item) => item.id === todo.id)
-        state.todos[index].completed = !state.todos[index].completed
-        console.log('completeToDoItem mutation finished', state.todos[index].completed)
+    updateToDoItem(state, todo) {
+        console.log('updateToDoItem mutation started')
+        state.selectedTodo = todo
+        state.todos.splice(state.todos.findIndex((item) => item.id === state.selectedTodo.id), 1, state.selectedTodo)
+        // reset the selectedTodo object state
+        state.selectedTodo = {
+            completed: '',
+            id: '',
+            title: '',
+            userId: '',
+        }
+        console.log('updateToDoItem mutation finished', state.selectedTodo)
     },
     updateActiveTab(state, tab) {
         console.log('updateActiveTab mutation started')
@@ -106,8 +107,9 @@ export const mutations = {
         state.toggleAddToDoForm = !state.toggleAddToDoForm
         console.log('TOGGLE_ADDTODO_FORM mutation finished', state.toggleAddToDoForm)
     },
-    TOGGLE_EDITTODO_FORM(state) {
+    TOGGLE_EDITTODO_FORM(state, todo) {
         console.log('TOGGLE_EDITTODO_FORM mutation started')
+        state.selectedTodo = todo
         state.toggleEditToDoForm = !state.toggleEditToDoForm
         console.log('TOGGLE_EDITTODO_FORM mutation finished', state.toggleEditToDoForm)
     }

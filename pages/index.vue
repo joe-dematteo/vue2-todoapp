@@ -4,9 +4,11 @@
     <searchBar />
 
     <todoCard />
-    <addToDo v-if="toggleAddToDoForm"/>
-    <editToDo v-if="toggleEditToDoForm"/>
-    <button class="addTodoBtn" @click="handleAddToDoForm">+</button>
+    <transition name="slide-up">
+      <addToDo v-if="toggleAddToDoForm"/>
+      <editToDo v-if="toggleEditToDoForm"/>
+    </transition>
+    <button class="add-todo-button" @click="handleAddToDoForm">+</button>
   </div>
 </template>
 
@@ -32,7 +34,14 @@ export default {
 }
 </script>
 
-<style>
+<style style="scss">
+
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: opacity .5s;
+}
+.slide-up-enter, .slide-up-leave-to {
+  opacity: 0;
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -40,22 +49,31 @@ html, body {
   width: 100%;
   font-family: 'Poppins', Helvetica, Arial, sans-serif;
   background-color: #070417;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+input, button, textarea {
+  font: inherit;
 }
 
-.addTodoBtn {
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+select {
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
+
+.add-todo-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,9 +89,5 @@ html, body {
   border: none;
   font-size: 30px;
   cursor: pointer;
-}
-
-.addToDoForm {
-  display: none;
 }
 </style>

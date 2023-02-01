@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="todoCard" 
+        <div 
         v-for="todo in getFilteredTodos" :key="todo.id"
-        :class="{ todoCardCompleted: !todo.completed }">
+        :class="!todo.completed ? 'todoCard' : 'todoCardCompleted'">
             <div class="statusTooltip">
                 <span class="tooltiptext">Change Status</span>
                 <div class="statusContainer">
@@ -17,7 +17,7 @@
             </div>
             <div class="tooltip">
                 <span class="tooltiptext">Edit ToDo</span>
-                <img src="fab.svg" @click="handleEditToDoForm"/>
+                <img src="fab.svg" @click="handleEditToDoForm(todo)"/>
             </div>
         </div>
     </div>
@@ -36,8 +36,8 @@ export default {
     methods: {
         ...mapActions(['getToDos']),
         // when the user clicks the edit todo button, the form will toggle on/off
-        handleEditToDoForm() {
-            this.$store.commit('TOGGLE_EDITTODO_FORM')
+        handleEditToDoForm(todo) {
+            this.$store.commit('TOGGLE_EDITTODO_FORM', todo)
         },
     },
     created() {
@@ -73,12 +73,11 @@ export default {
     align-items: center;
 }
 
-.todoCarCompleted:hover {
-    background: #292639;
-}
-
-.todoCarCompleted:hover .status {
+.todoCardCompleted:hover .status {
     cursor: pointer;
+}
+.todoCardCompleted:hover {
+    background: #3C3850;
 }
 
 .todoCard:hover {
@@ -90,7 +89,7 @@ export default {
     background: #292639;
 }
 
-.todoCard div {
+.todoCardCompleted div {
     float: left;
 }
 
@@ -115,7 +114,10 @@ statusContainer {
 
 .column {
     height: 75px;
-    width: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 .title {
     font-size: 16px;
@@ -125,7 +127,10 @@ statusContainer {
     width: 100%;
     line-height: 20px;
     padding: 10px;
-    overflow: visible;
+    padding-right: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .userId {
@@ -147,8 +152,8 @@ img {
 }
 
 .tooltip {
-    position: relative;
-    display: inline-block;
+    position: absolute;
+    right: 40px;
 }
 
 .statusTooltip {
@@ -159,9 +164,9 @@ img {
 .tooltip .tooltiptext {
     visibility: hidden;
     width: auto;
-    background-color: #231E3E;
+    background-color: #6a169352;
     backdrop-filter: blur(50px);
-    color: rgba(255, 255, 255, 0.743);
+    color: rgba(255, 255, 255, 0.919);
     text-align: center;
     border-radius: 6px;
     padding: 5px 4px;
@@ -177,9 +182,9 @@ img {
 .statusTooltip .tooltiptext {
     visibility: hidden;
     width: auto;
-    background-color: #231E3E;
+    background-color: #6a169352;
     backdrop-filter: blur(50px);
-    color: rgba(255, 255, 255, 0.743);
+    color: rgba(255, 255, 255, 0.919);
     text-align: center;
     border-radius: 6px;
     padding: 5px 4px;
